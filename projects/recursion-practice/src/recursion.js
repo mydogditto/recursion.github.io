@@ -76,26 +76,49 @@ var sumBelow = function(n, sum = 0) {
 
 // 6. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
-var range = function(x, y, output = []) {
-if(x === y - 1 || y === x + 1){
-  return output
-}
-if(x === 0 && y === 0){
-  return []
-}
-if(x === y){
-  return []
-}
-if(x < y){
-  output.push(x+1)
+
+var range = function(x, y, array = []) {
+  //base case
+  if(x === y - 1){
+    return array
+  }
+  if ( x === y + 1){
+    return array
+  }
+  if (x === 0 && y === 0){
+    return []
+  }
+  if (x === y){
+    return []
+  }
+  
+  // //recursion
+  // //iterate through the array and push the numbers into the array
+  
+  if(x < y){
+  array.push(x+1)
+  
+  // iterate till y - 1 is reached 
+  return range(x + 1, y, array)
+  }
+  
+  // }; 
+  //recursion
+  //iterate through the array and push the numbers into the array
+  // if x is grater less than y. 
+  // push x + 1 into the array
+  
+  if(x < y){
+  array.push(x+1)
   // itterate till y - 1 is reached 
-  return range(x + 1, y, output)
+  return range(x + 1, y, array)
   }
   if(x > y){
-    output.push(x - 1)
-    return range(x - 1, y , output)
+    array.push(x - 1)
+    return range(x - 1, y , array)
   }
-};
+  
+  }
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
@@ -112,11 +135,12 @@ if(exp === 1){
   return base
 }
 //recusion 
-// base * base exp number of times 
+// base * base exp number of times : to keep the process going - 1
 if(exp > 0){
 return base * exponent(base, exp - 1)
 }else if(exp < 0){
-  return base * exponent(base, exp + 1)
+  // if exp is less than 1, 1 devided by the invocation - whatever the exponent is to keep it going
+  return 1/ exponent(base, - exp);
 }
 };
 
@@ -124,11 +148,27 @@ return base * exponent(base, exp - 1)
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
-var powerOfTwo = function(n) {
-};
+// problem powerOfTwo(9);// false yet it is a power of 2
+// should return a boolian 
+// n * n shoud be true 
+// n / 2 
+var powerOfTwo = function(n, x = 1 ) {
+  // base 
+  let product = x**2;
+if(n === 0){
+   return false
+} else if(n === product){
+ return true
+} else if(product > n){
+ return false
+}
+  // recusion 
+return powerOfTwo(n, x + 1);
+}
 
 // 9. Write a function that accepts a string a reverses it.
 var reverse = function(string) {
+
 };
 
 // 10. Write a function that determines if a string is a palindrome.
@@ -147,6 +187,9 @@ var modulo = function(x, y) {
 // JavaScript's Math object.
 // ATTENTION DO NOT LEAVE COMMENTS IN THIS FUNCTION. The test is looking for any ('/').
 var multiply = function(x, y) {
+
+
+
 };
 
 // 13. Write a function that divides two numbers without using the / operator  or
