@@ -184,7 +184,23 @@ return reverse(string.slice(0, string.length -1), output)
 };
 
 // 10. Write a function that determines if a string is a palindrome.
-var palindrome = function(string) {
+//IGNORE SPACES AND CAPITALIZATION
+var palindrome = function(string){
+ 
+ var str = string.replace(/ /g, '');
+ // base
+ if (str.length === 0){
+   // return true
+   return true;
+ }
+
+ if (str[0].toLowerCase() !== str[str.length - 1].toLowerCase()){
+   // return false
+   return false;
+ }
+ // recursion
+ 
+ return palindrome(str.slice(1, str.length - 1));
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -231,7 +247,7 @@ var gcd = function(x, y) {
 // compareStr('tomato', 'tomato') // true
 var compareStr = function(str1, str2) {
     // base case
-    if(str1.length === 0 && str2.length ===0){
+    if(str1.length === 0 && str2.length === 0){
       return true
     }
     // recursion
@@ -245,31 +261,67 @@ var compareStr = function(str1, str2) {
 
 // 16. Write a function that accepts a string and creates an array where each letter
 // occupies an index of the array.
-var createArray = function(str){
+var createArray = function(str, output = []){
+  // base
+  if(str.length === 0){
+    return output
+  }
+
+  // recusion 
+  output.push(str[0])
+  return createArray(str.slice(1), output)
 };
 
 // 17. Reverse the order of an array
-var reverseArr = function (array) {
+var reverseArr = function (array, output = []) {
+  //base
+  if(array.length === 0){
+    return output
+  }
+  //recursion
+  //push the last letter of the array into the output array
+  output.push(array[array.length - 1])
+  // return the function with the sliced array
+  return reverseArr(array.slice(0, array.length - 1), output)
+
 };
 
 // 18. Create a new array with a given value and length.
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
-var buildList = function(value, length) {
+var buildList = function(value, length, output = []) {
+  // base 
+if(output.length === length){
+  return output
+}
+// recusion 
+// to build an array we need to push the value to the array
+output.push(value)
+return buildList(value, length, output)
+
 };
 
 // 19. Count the occurence of a value inside a list.
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
-var countOccurrence = function(array, value) {
+var countOccurrence = function(array, value, count = 0) {
+if(array.length === 0){
+  return count
+}
+if(array[0] === value){
+  count += 1
+}
+return countOccurrence(array.slice(1), value, count)
 };
 
 // 20. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback, output = []) {
+  // base
   if(array.length === 0){
     return output;
   }
+  // recusion 
   output.push(array[0] * 2);
   return rMap(array.slice(1), callback, output)
 };
@@ -307,7 +359,20 @@ var fibonacci = function(n) {
 // nthFibo(5); // 5
 // nthFibo(7); // 13
 // nthFibo(3); // 2
+// the fib secquesnce is the sum of the two preceding numbers in the sequence
+
 var nthFibo = function(n) {
+if(n === 0){
+  return 0
+}
+if(n === 1){
+  return 1
+}
+if(n < 0){
+  return null
+}
+
+return nthFibo(n - 1) + nthFibo(n - 2)
 };
 
 // 26. Given an array of words, return a new array containing each word capitalized.
@@ -324,7 +389,18 @@ return capitalizeWords(input.slice(1), output)
 
 // 27. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car', 'poop', 'banana']); // ['Car', 'Poop', 'Banana']
-var capitalizeFirst = function(array) {
+var capitalizeFirst = function(array, output = []) {
+  // base
+if(array.length === 0){
+  return output
+}
+// we need to capitalize every supindex 0 not just every index
+// slice off the first index of the first word
+let firstLetter = array[0][0].toUpperCase()
+let secondHalf = array[0].slice(1)
+let joined = firstLetter + secondHalf
+output.push(joined)
+return capitalizeFirst(array.slice(1), output)
 };
 
 // 28. Return the sum of all even numbers in an object containing nested objects.
@@ -346,7 +422,16 @@ var flatten = function(arrays) {
 
 // 30. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {'p':1, 'o':2, 't':2, 'a':1}
-var letterTally = function(str, obj) {
+var letterTally = function(str, obj, output = {}) {
+  if(str.length === 0){
+    return output
+  }
+  if (output[str[0]] === undefined){
+    output[str[0]] = 1
+  } else { 
+    output[str[0]] += 1
+  }
+  return letterTally(str.slice(1), obj, output)
 };
 
 // 31. Eliminate consecutive duplicates in a list.  If the list contains repeated
@@ -354,7 +439,12 @@ var letterTally = function(str, obj) {
 // elements should not be changed.
 // Example: compress([1, 2, 2, 3, 4, 4, 5, 5, 5]) // [1, 2, 3, 4, 5]
 // Example: compress([1, 2, 2, 3, 4, 4, 2, 5, 5, 5, 4, 4]) // [1, 2, 3, 4, 2, 5, 4]
-var compress = function(list) {
+var compress = function(list,  output = []) {
+// base
+if(list.length === 0){
+  return output
+}
+
 };
 
 // 32. Augment every element in a list with a new value where each element is an array
@@ -379,7 +469,36 @@ var alternateSign = function(array) {
 // 35. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
-var numToText = function(str) {
+var numToText = function(str, newString = '') {
+  if(str.length === 0){
+    return newString
+  }
+
+  if(str[0] === "0"){
+    newString += "zero"
+  } else if(str[0] === "1"){
+    newString += "one"
+ 
+} else if(str[0] === "2"){
+    newString += "two"
+} else if(str[0] === "3"){
+    newString += "three"
+} else if(str[0] === "4"){
+    newString += "four"
+} else if(str[0] === "5"){
+    newString += "five"
+} else if(str[0] === "6"){
+    newString += "six"
+} else if(str[0] === "7"){
+    newString += "seven"
+} else if(str[0] === "8"){
+    newString += "eight"
+} else if(str[0] === "9"){
+    newString += "nine"
+} else {
+    newString += str[0]
+}  
+  return numToText(str.slice(1), newString)
 };
 
 // *** EXTRA CREDIT ***
