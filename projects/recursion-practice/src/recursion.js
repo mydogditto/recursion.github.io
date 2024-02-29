@@ -330,9 +330,24 @@ var rMap = function(array, callback, output = []) {
 // var testobj = {'e': {'x':'y'}, 't':{'r': {'e':'r'}, 'p': {'y':'r'}},'y':'e'};
 // countKeysInObj(testobj, 'r') // 1
 // countKeysInObj(testobj, 'e') // 2
-var countKeysInObj = function(obj, key) {
-};
+var countKeysInObj = function(obj, key, count = 0) {
 
+  // iterate through the object
+  for (let prop in obj) {
+    // if the object has a property that is an object
+    if (typeof obj[prop] === 'object') {
+      // recursively call the function
+      countKeysInObj(obj[prop], key, count);
+    }
+    // if the object has a property that is equal to the key
+    if (prop === key) {
+      // increment the count
+      count++;
+    }
+  }
+  // return the count
+  return count;
+}
 // 22. Write a function that counts the number of times a value occurs in an object.
 // var testobj = {'e': {'x':'y'}, 't':{'r': {'e':'r'}, 'p': {'y':'r'}},'y':'e'};
 // countValuesInObj(testobj, 'r') // 2
@@ -444,7 +459,11 @@ var compress = function(list,  output = []) {
 if(list.length === 0){
   return output
 }
-
+// if array[0] is the same as array[1] only push array[0]
+if(list[0] !== list[1]){
+  output.push(list[0])
+}
+return compress(list.slice(1), output)
 };
 
 // 32. Augment every element in a list with a new value where each element is an array
@@ -456,15 +475,51 @@ var augmentElements = function(array, aug) {
 // 33. Reduce a series of zeroes to a single 0.
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
-var minimizeZeroes = function(array) {
+var minimizeZeroes = function(array, output = []) {
+    //base
+    if(array.length === 0){
+      return output
+    }
+  // only push if the proceeding element was not 0
+    if(array[0] !== 0 && array[1] === 0 ){
+      //push to output
+      output.push(array[0])
+      return minimizeZeroes(array.slice(1), output)
+    } else if (array[0] === 0 && array[1] === 0){
+      
+      return minimizeZeroes(array.slice(1), output)
+    } else {
+      output.push(array[0])
+      return minimizeZeroes(array.slice(1), output)
+    }
 };
 
 // 34. Alternate the numbers in an array between positive and negative regardless of
 // their original sign.  The first number in the index always needs to be positive.
 // alternateSign([2,7,8,3,1,4]) // [2,-7,8,-3,1,-4]
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
-var alternateSign = function(array) {
-};
+var alternateSign = function(array, output= []) {
+  //base
+  if(array.length === 0){
+    return output
+  }
+  //recursion
+  // if the first element is negative 
+  if(array[0] < 0){
+    // push a posative verstion to output
+    output.push(Math.abs(array[0]))
+    // else the first value is positive, so push it
+  } else{ output.push(array[0])}
+  // if the 2nd value is negative push it to output
+  if(array[1]< 0){
+    output.push(array[1])
+    // otherwise if the 2nd value is possitive, push a negative verstion of the value
+  } else if(array[1]> 0){
+    output.push(-Math.abs(array[1]))
+  }
+  // use recursion to slice through the rest of the array
+  return alternateSign(array.slice(2), output)
+}
 
 // 35. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
